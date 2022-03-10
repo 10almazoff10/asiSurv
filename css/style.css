@@ -1,0 +1,204 @@
+body {
+    background: linear-gradient(to right, rgb(136, 79, 192), rgb(251, 105, 54));
+    font-family: 'Montserrat', sans-serif !important;
+}
+
+.main_box {
+    display: flex;
+    justify-content: space-between;
+    background-color: rgba(92, 92, 92, 0.171);
+    border-radius: 10px;
+    width: 100vw;
+    height: 100vh;
+    margin: auto;
+    padding: 30px;
+
+    
+}
+
+.box3d {
+    box-shadow: 0px 0px 20px;
+    border-radius: 10px;
+}
+
+  
+
+.left_panel {
+    padding: 20px 10px 0px 10px;
+    height:100%;
+    min-width: 370px;
+    margin-bottom: 10px;
+    transform: translateX(-150%);
+    animation: ani 0.5s forwards;
+}
+@keyframes ani {
+    0% {transform: translateX(-150%);}
+    100% {transform: translateY(0);}
+  }
+.workers_list{
+    line-height: normal;
+    height: 99%;
+    overflow:auto;
+    position: relative;
+}
+
+.mid_pannel {
+    margin-left: 50px;
+    width: 100%;
+}
+
+.top_picker {
+    margin: auto;
+    margin-top: 20px;
+    width: 350px;
+    text-align: center;
+    padding: 20px;
+
+}
+
+.btn_date {
+    margin-top: 10px;
+    width: 100%;
+}
+
+.result_form {
+    margin-top: 10px;
+    background-color: rgb(255, 255, 255);
+    padding: 5px;
+    width: 100%;
+    height: 100%;
+    border-radius: 3px;
+}
+
+.about_worker {
+    padding: 20px;
+    margin: auto;
+    width: 400px;
+}
+.worker_table {
+    width: 60%;
+    min-width: 550px;
+    margin: auto;
+
+
+}
+.search {
+    border-radius: 7px;
+}
+.search_box {
+    position: relative;
+}
+.search_box input[type="text"] {
+    display: block;
+    width: 100%;
+    height: 35px;
+    line-height: 35px;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #fd4836;
+    outline: none;
+    overflow: hidden;
+    border-radius: 4px;
+    background-color: rgb(255, 255, 255);
+    text-indent: 15px;
+    font-size: 14px;
+    color: #222;
+}
+.search_box input[type="submit"] {
+    display: inline-block;
+    width: 17px;
+    height: 17px;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    outline: 0;
+    overflow: hidden;
+    text-indent: -999px;
+    background: url(https://snipp.ru/demo/127/search.png) 0 0 no-repeat;
+    position: absolute;
+    top: 9px;
+    right: 16px;
+}
+
+/* Стили для плашки с результатами */
+.search_result {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    border: 1px solid #ddd;
+    background: #fff;
+    padding: 10px;
+    z-index: 9999;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+
+
+ul {list-style-type:none;}
+
+.month {
+    width: 100%;
+    text-align: center;
+}
+
+.month ul {
+    margin: 0;
+    padding: 0;
+}
+
+.month ul li {
+    color: rgb(0, 0, 0);
+    font-size: 40px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
+
+.weekdays {
+    margin: 0;
+    padding: 25px 0;
+    background-color: rgba(59, 15, 255, 0.164);
+}
+
+.weekdays li {
+    display: inline-block;
+    width: 13.6%;
+    color: rgb(0, 0, 0);
+    text-align: center;
+}
+
+.days {
+    padding: 25px 0;
+    background: #eee;
+    margin: 0;
+    
+}
+
+.days li {
+    list-style-type: none;
+    display: inline-block;
+    width: 13.6%;
+    text-align: center;
+    margin-bottom: 5px;
+    font-size:25px;
+    color: rgb(0, 0, 0);
+}
+
+.days li .active {
+    padding: 5px;
+    background: #581abc;
+    color: white !important
+}
+
+/* Add media queries for smaller screens */
+@media screen and (max-width:720px) {
+    .weekdays li, .days li {width: 13.1%;}
+}
+
+@media screen and (max-width: 420px) {
+    .weekdays li, .days li {width: 12.5%;}
+    .days li .active {padding: 2px;}
+}
+
+@media screen and (max-width: 290px) {
+    .weekdays li, .days li {width: 12.2%;}
+}
