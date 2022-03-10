@@ -18,9 +18,6 @@ function sendAjaxForm(result_form, ajax_form, url) {
             result = $.parseJSON(response);
             $('#result_form').html(result.date);
 
-
-
-
         },
         error: function(response) { // Данные не отправлены
             $('#result_form').html('Ошибка. Данные не отправлены.');
