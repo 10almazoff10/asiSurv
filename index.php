@@ -87,6 +87,7 @@ include "php/Workers.php";
                     
                 </div>
                 <input class="btn btn-light btn_date" type="button" id="btn" value="Выбрать" />
+                <button class="btn btn-light btn_date" id="print" onclick="printContent('result_form');" >Печать</button>
                 
             </form>
 
@@ -101,9 +102,9 @@ include "php/Workers.php";
 
 
             <div class="worker_table box3d" id="result_form"></div>
-                
             
             </div>
+
 
 
 
@@ -116,7 +117,19 @@ include "php/Workers.php";
 
         });
     });
+    //Функция печати дива "result_form"
+    function printContent(el){
+        var restorepage = $('body').html();
+        var printcontent = $('#' + el).clone();
+        var enteredtext = $('#text').val();
+        $('body').empty().html(printcontent);
+        window.print();
+        $('body').html(restorepage);
+        $('#text').html(enteredtext);
+    }
 </script>
+
+
 
 
 

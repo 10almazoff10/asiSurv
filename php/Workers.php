@@ -14,7 +14,7 @@ class Workers
     }
 
     function list_workers(){
-        $arr_workers = $this->querySql($this->table_workers, NULL);
+        $arr_workers = $this->querySql( "SELECT * FROM $this->table_workers");
         foreach ($arr_workers as $key => $value)
         {
             $id = $value['id'];
@@ -39,10 +39,11 @@ class Workers
         }
     }
 
-    function querySql($table, $mode){
+    function querySql($query){
         $mysqli = new mysqli($this->url, $this->user, $this->pass, $this->db);
 
-        foreach ($mysqli->query("SELECT * FROM $table $mode") as $key => $value) {
+        foreach ($mysqli->query($query) as $key => $value) {
+
             $first_name = $value['last_name'];
             $mid_name = $value['first_name'];
             $last_name = $value['mid_name'];
@@ -63,13 +64,31 @@ class Workers
 
     }
 
+    function querySqlTimeing($query){
+        $mysqli = new mysqli($this->url, $this->user, $this->pass, $this->db);
+
+        foreach ($mysqli->query($query) as $key => $value) {
+
+            $user_id = $value['user_id'];
+            $datetime = $value['datetime'];
+            $event = $value['event'];
+
+            $arr["$key"] = array(user_id => $user_id, datetime => $datetime, event => $event);
+
+        }
+
+        return $arr;
+
+
+    }
+
     function worker_out_data($date,$id)
     {
         $pieces_date = explode("/", $date);
         $month = $pieces_date[0];
         $year = $pieces_date[1];
-        $sqlQuery = "WHERE worker_id=$id";
-        $sqlrResult = $this->querySql($this->table_workers, $sqlQuery);
+        $sqlQuery = "SELECT * FROM $this->table_workers WHERE worker_id=$id";
+        $sqlrResult = $this->querySql($sqlQuery);
 
         foreach ($sqlrResult as $key => $value)
         {
@@ -109,34 +128,65 @@ class Workers
                         <li>ВС</li>
                     </ul>
                     <ul class="days">
-                    '.$this->table_calendar($month, $year);
+                    '.$this->table_calendar($month, $year, $id);
         return $out_data;
 
     }
 
-    function table_calendar($month, $year){
+    function table_calendar($month, $year, $id){
 
         $date = new DateTime($year."-".$month."-1");
         $first_day = $date->format('N');
         $day_month = $date->format('t');
         $max_day = $first_day + $day_month;
-        $day = 1;
-        for($i = 1; $i<=42;$i++){
+        $day_calendar = 01;
+
+        $sqlQuery = "SELECT * FROM timeing WHERE user_id = $id AND datetime >= '$year-$month-01' AND datetime <='$year-$month-$day_month'";
+        $sqlrResult = $this->querySqlTimeing($sqlQuery);
+
+        foreach ($sqlrResult as $key => $value)
+        {
+
+            $pieces[$key] =  explode(" ", $sqlrResult[$key]['datetime']);
+
+            $pieces_date[$key] =  explode("-", $pieces[$key][0]);
+
+            $pieces_time[$key] =  explode(":", $pieces[$key][1]);
+
+            $year_worker[$key] =  $pieces_date[$key][0];
+            $month_worker[$key] =  $pieces_date[$key][1];
+            $day_worker[$key] =  $pieces_date[$key][2];
+
+            $hour_worker[$key] = $pieces_time[$key][0];
+            $minute_worker[$key] = $pieces_time[$key][1];
+
+        }
+
+
+
+
+
+
+        for($i = 1; $i<=$max_day-1;$i++){
+
+
 
             if($i < $first_day)
             {
                 $out .= "<li></li>";
                 continue;
             }
-            if($i == $max_day) break;
+            if($day_calendar%7==0) $out.='</ul><ul class="days">';
+
+            $out .="<li>$day_calendar <br>$hour_worker[$day_calendar]:$minute_worker[$day_calendar]
+                    $hour_worker[$day_calendar]:$minute_worker[$day_calendar]<br>(10:00)</li> ";
 
 
 
-            $out .="<li>$day</li>";
-            $day ++;
+            $day_calendar ++;
         }
 
-        return $out;
+        return $out.'</ul></div>';
     }
 
 
@@ -146,51 +196,7 @@ class Workers
         $input_data=$this->worker_out_data($date,$id_worker);
 
         $out= $input_data;
-        /*'     <ul class="weekdays">
-                        <li>ПН</li>
-                        <li>ВТ</li>
-                        <li>СР</li>
-                        <li>ЧТ</li>
-                        <li>ПТ</li>
-                        <li>СБ</li>
-                        <li>ВС</li>
-                    </ul>
 
-
-                        <li>28</li>
-                        <li>1</li>
-                        <li>2</li>
-                        <li>3</li>
-                        <li>4</li>
-                        <li>5</li>
-                        <li>6</li>
-                        <li>7</li>
-                        <li>8</li>
-                        <li>9</li>
-                        <li>10</li>
-                        <li>11</li>
-                        <li>12</li>
-                        <li>13</li>
-                        <li>14</li>
-                        <li>15</li>
-                        <li>16</li>
-                        <li>17</li>
-                        <li>18</li>
-                        <li>19</li>
-                        <li>20</li>
-                        <li>21</li>
-                        <li>22</li>
-                        <li>23</li>
-                        <li>24</li>
-                        <li>25</li>
-                        <li>26</li>
-                        <li>27</li>
-                        <li>28</li>
-                        <li>29</li>
-                        <li>30</li>
-                        <li>31</li>
-                    </ul>
-                    </div>';*/
 
         return $out;
 
