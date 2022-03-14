@@ -85,36 +85,35 @@ def update_log(new_date):
 
 
 def main():
-    while True:
-        try:
-            last_update_date = check_last_update_date()
-            print(f'Последняя дата обновления {last_update_date}')
-        except:
-            print('Ошибка проверки последнего обновления')
-            return
+    try:
+        last_update_date = check_last_update_date()
+        print(f'Последняя дата обновления {last_update_date}')
+    except:
+        print('Ошибка проверки последнего обновления')
+        return
 
-        try:
-            update = check_new_update(last_update_date)
-            if update != []:
-                print(f'Доступно для обновления {len(update)} новых записи')
-                print(update[len(update) - 1][1])
-                try:
-                    updating(update)
-                except:
-                    print('Ошибка загрузки обновлений')
-                    return
-                    
-                new_update_date = update[len(update) - 1][1]
-                update_log(new_update_date)
-                print('Обновление успешно выполнено!')
+    try:
+        update = check_new_update(last_update_date)
+        if update != []:
+            print(f'Доступно для обновления {len(update)} новых записи')
+            print(update[len(update) - 1][1])
+            try:
+                updating(update)
+            except:
+                print('Ошибка загрузки обновлений')
+                return
+                
+            new_update_date = update[len(update) - 1][1]
+            update_log(new_update_date)
+            print('Обновление успешно выполнено!')
 
 
-            else:
-                print('Новых записей нет')
-        
-        except:
-            print('Ошибка')
-        time.sleep(1000)
+        else:
+            print('Новых записей нет')
+    
+    except:
+        print('Ошибка')
+
 
 
 

@@ -4,7 +4,6 @@ body
 	font-family:Montserrat, sans-serif!important;
 }
 
-
 .main_box
 {
 	display:flex;
@@ -47,11 +46,6 @@ body
 	position:relative;
 	width:350px;
 }
-::-webkit-scrollbar { /* webkit */
-    width: 0;
-    height: 0;
-	
-}
 
 .form_radio_btn
 {
@@ -67,36 +61,34 @@ body
 {
 	font-weight:lighter;
 	width:100%;
-	background:#1d1d1d6b;
+	background:#efefef;
 	display:inline-block;
 	cursor:pointer;
 	padding:0 15px;
 	line-height:34px;
+	border:1px solid #999;
 	border-radius:6px;
 	user-select:none;
-	
-	color:rgb(221, 221, 221);
 }
 
 /* Checked */
 .form_radio_btn input[type=radio]:checked + label
 {
-	background:#00000081;
+	background:#fff;
 	font-weight:bolder;
 }
 
 /* Hover */
 .form_radio_btn label:hover
 {
-	color:rgb(240, 240, 240);
-	background:#00000067;
+	color:#000;
 }
 
 /* Disabled */
 .form_radio_btn input[type=radio]:disabled + label
 {
-	background:#0000007e;
-	color:rgb(235, 235, 235);
+	background:#efefef;
+	color:#666;
 }
 
 .mid_pannel
@@ -133,7 +125,6 @@ body
 .about_worker
 {
 	font-size:large;
-    font-weight: bold;
 	padding:20px;
 	margin:auto;
 	width:500px;
@@ -248,7 +239,7 @@ ul
 {
 	padding:25px 0;
 	background:#eee;
-    border-radius: 10px;
+	margin:0;
 }
 
 .days li
@@ -262,6 +253,12 @@ ul
 	color:#000;
 }
 
+.days li .active
+{
+	padding:5px;
+	background:#581abc;
+	color:#FFF!important;
+}
 
 /* Add media queries for smaller screens */
 @media screen and (max-width:720px) {

@@ -2,9 +2,10 @@ from mysql.connector import connect, Error
 import pyodbc
 import MySQLdb
 import pymssql
+import time
 
 
-
+time_now = time.strftime("%d.%m.%Y")
 
 
 
@@ -30,8 +31,8 @@ def connect_to_ubuntu_sql(SQL):
     except:
         print("Ошибка подключения к БД убунту")
 
-SQL_WORKERS = """SELECT pList.ID as worker_id, pList.Name as last_name, FirstName as first_name, MidName as middle_name,
-  PCompany.Name as company, PDivision.Name as division, PPost.Name as post
+SQL_WORKERS = f"""SELECT pList.ID as worker_id, pList.Name as last_name, FirstName as first_name, MidName as middle_name,
+  PCompany.Name as company, PDivision.Name as division, PPost.Name as post, pList.DateTimeInArchive as date_end
 FROM pList
 LEFT JOIN PCompany ON pList.Company = PCompany.ID
 LEFT JOIN PDivision ON pList.Section = PDivision.ID
@@ -39,7 +40,7 @@ LEFT JOIN PPost ON pList.Post = PPost.ID
 WHERE pList.ID IN (
   SELECT DISTINCT pLogData.HozOrgan
   FROM pLogData
-  WHERE pLogData.TimeVal > '01.01.2021' AND pLogData.TimeVal <= '09.03.2022' AND pLogData.Event = 32
+  WHERE pLogData.TimeVal > '01.01.2020' AND pLogData.TimeVal <= '{time_now}' AND pLogData.Event = 32
 )
 ORDER BY pList.Name, FirstName, MidName;
 """
@@ -51,10 +52,15 @@ def main():
     data = cursorMS.fetchall()
     connect_to_ubuntu_sql('TRUNCATE workers;')
     for i in data:
-        connect_to_ubuntu_sql (f"INSERT INTO workers VALUES ('{i[0]}', '{i[1]}', '{i[2]}', '{i[3]}', '{i[4]}', '{i[5]}', '{i[6]}');")
         print(i[1])
+        if i[7] == data[0][7]:
+            SQL = f"INSERT INTO workers VALUES ('{i[0]}', '{i[1]}', '{i[2]}', '{i[3]}', '{i[4]}', '{i[5]}', '{i[6]}', null);"
+            connect_to_ubuntu_sql (SQL)
+        else:
+            connect_to_ubuntu_sql (f"INSERT INTO workers VALUES ('{i[0]}', '{i[1]}', '{i[2]}', '{i[3]}', '{i[4]}', '{i[5]}', '{i[6]}', '{i[7]}');")
 
-    pass
+
+
 
 
 
