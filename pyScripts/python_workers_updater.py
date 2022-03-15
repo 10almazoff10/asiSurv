@@ -44,7 +44,7 @@ WHERE pList.ID IN (
 )
 ORDER BY pList.Name, FirstName, MidName;
 """
-
+bad_users = [1]
 
 def main():
     cursorMS = connect_to_mssql()
@@ -52,13 +52,16 @@ def main():
     data = cursorMS.fetchall()
     connect_to_ubuntu_sql('TRUNCATE workers;')
     for i in data:
-        print(i[1])
-        if i[7] == data[0][7]:
-            SQL = f"INSERT INTO workers VALUES ('{i[0]}', '{i[1]}', '{i[2]}', '{i[3]}', '{i[4]}', '{i[5]}', '{i[6]}', null);"
-            connect_to_ubuntu_sql (SQL)
+        
+        if i[0] not in bad_users:
+            print(i[1])
+            if i[7] == data[0][7]:
+                SQL = f"INSERT INTO workers VALUES ('{i[0]}', '{i[1]}', '{i[2]}', '{i[3]}', '{i[4]}', '{i[5]}', '{i[6]}', null);"
+                connect_to_ubuntu_sql (SQL)
+            else:
+                connect_to_ubuntu_sql (f"INSERT INTO workers VALUES ('{i[0]}', '{i[1]}', '{i[2]}', '{i[3]}', '{i[4]}', '{i[5]}', '{i[6]}', '{i[7]}');")
         else:
-            connect_to_ubuntu_sql (f"INSERT INTO workers VALUES ('{i[0]}', '{i[1]}', '{i[2]}', '{i[3]}', '{i[4]}', '{i[5]}', '{i[6]}', '{i[7]}');")
-
+            print(f"{i[0]} {i[2]} пользователь не добавлен")
 
 
 

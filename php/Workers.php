@@ -159,8 +159,13 @@ class Workers
         $calendar_day = 01;
         //Переменная дня адекватной выборки из SQL по дате
         $month_1 =$month+1;
+        $year_1 = $year;
+        if($month_1 == 13) {
+            $year_1 = $year+1;
+            $month_1 = 01;
+        }
         //Запрос на выборку SQL
-        $sqlQuery = "SELECT * FROM timeing WHERE user_id = $id AND datetime > '$year-$month-01' AND datetime <='$year-$month_1-1' ORDER BY datetime";
+        $sqlQuery = "SELECT * FROM timeing WHERE user_id = $id AND datetime >= '$year-$month-01' AND datetime <='$year_1-$month_1-1' ORDER BY datetime";
         //Результат выборки в виде массива
         $sqlrResult = $this->querySqlTimeing($sqlQuery);
 
@@ -174,13 +179,66 @@ class Workers
                 continue;
             }
             //Вывод дня в календарь
-            $out .='<th class="calendarTH">'.$calendar_day;
+            $out .='<th class="calendarTH"><div class="calendarDay">'.$calendar_day.'</div>';
+
+            //Проход по всей выборке
+            foreach ($sqlrResult as $key => $value)
+            {
+                //Разделение на дату и время
+                $pieces[$key] =  explode(" ", $sqlrResult[$key]['datetime']);
+                //Вход выход
+                $event[$key] = $sqlrResult[$key]['event'];
+                //Разделение на год, месяц, день
+                $pieces_date[$key] =  explode("-", $pieces[$key][0]);
+                //Разделение на час, минуту
+                $pieces_time[$key] =  explode(":", $pieces[$key][1]);
+
+                $year_worker[$key] =  $pieces_date[$key][0];
+                $month_worker[$key] =  $pieces_date[$key][1];
+                $day_worker[$key] =  $pieces_date[$key][2];
+
+                $hour_worker[$key] = $pieces_time[$key][0];
+                $minute_worker[$key] = $pieces_time[$key][1];
+
+                
+                //Если день вывода в календарь совпарает с днем в базе
+                if($calendar_day == $day_worker[$key])
+                {   //Если событие входа
+                    if($event[$key]  == 1)
+                    {
+                        $out .="Вход: $hour_worker[$key]:$minute_worker[$key]<br>";
+                        $date_in = new DateTime("$year_worker[$key]-$month_worker[$key]-$day_worker[$key] $hour_worker[$key]:$minute_worker[$key]:00");
+
+                    }
+                    elseif($event[$key]  == 2 && $event[$key-1]  == 1)
+                    {
+                        $out .="Выход: $hour_worker[$key]:$minute_worker[$key]<br>";
+                        $date_out = new DateTime("$year_worker[$key]-$month_worker[$key]-$day_worker[$key] $hour_worker[$key]:$minute_worker[$key]:00");
+                        $interval = $date_in->diff($date_out);
+                        $day = $interval->format('%d');
+                        $hour = $interval->format('%h');
+                        $minute = $interval->format('%i');
+                        $hour_day = $day*24;
+                        $hour += $hour_day;
+
+                        $global_hour_worker += $hour;
+                        $global_minute_worker += $minute;
+                        if($global_minute_worker>=60) {
+                            $global_hour_worker +=1;
+                            $global_minute_worker -=60;
+                        }
+
+                        $out .="($hour:$minute)";
+
+                    }
 
 
+                }
+            }
+            $out.="</th>";
 
 
-            
-            //Следующая строка при достижении ВС
+            //Следующая строка при достижении воскресенья
             if($i%7==0)
             {
                 $out.='</tr><tr  class="days">';
@@ -189,81 +247,8 @@ class Workers
             $calendar_day++;
         }
         //Возвращение таблицы в метод
-        return $out.'</tr></table></div>';
+        return $out.'</tr></table><div class="under_table">Общее количество часов ('.$global_hour_worker.':'.$global_minute_worker.')</div></div>';
 
-
-
-        /*
-        $date = new DateTime($year."-".$month."-1");
-        $first_day = $date->format('N');
-        $day_month = $date->format('t');
-        $max_day = $first_day + $day_month;
-        $day_calendar = 01;
-
-        $sqlQuery = "SELECT * FROM timeing WHERE user_id = $id AND datetime >= '$year-$month-01' AND datetime <='$year-$month-$day_month' ORDER BY datetime";
-        $sqlrResult = $this->querySqlTimeing($sqlQuery);
-
-
-
-        for($i = 1; $i<=$max_day-1;$i++){
-
-
-            if($i < $first_day)
-            {
-                $out .= '<th class="calendarTH"></th>';
-                continue;
-            }
-
-            $week_day = $day_calendar + $first_day-2;
-            if($week_day%7==0) $out.='</tr><tr  class="days">';
-
-            $out .='<th class="calendarTH">'.$day_calendar;
-
-            foreach ($sqlrResult as $key => $value)
-            {
-
-                $pieces[$key] =  explode(" ", $sqlrResult[$key]['datetime']);
-                $event = $sqlrResult[$key]['event'];
-
-                $pieces_date[$key] =  explode("-", $pieces[$key][0]);
-
-                $pieces_time[$key] =  explode(":", $pieces[$key][1]);
-
-                $year_worker[$key] =  $pieces_date[$key][0];
-                $month_worker[$key] =  $pieces_date[$key][1];
-
-                $day_worker[$key] =  $pieces_date[$key][2];
-
-                $hour_worker[$key] = $pieces_time[$key][0];
-                $minute_worker[$key] = $pieces_time[$key][1];
-
-                if($day_calendar == $day_worker[$key])
-                {
-                    if($event == 1)
-                    {
-                        $out .="<br>$hour_worker[$key]: $minute_worker[$key]</th> ";
-                    }
-                    elseif ($event == 2)
-                    {
-
-                    }
-                   // $out .='<th class="calendarTH">'.$day_calendar .'<br>'.$hour_worker[$key].':'.$minute_worker[$key].'<br>'. $hour_worker[$day_calendar].':'.$minute_worker[$day_calendar].'<br></li> ';
-
-                }
-            }
-
-
-
-          //  $out .="<li>$day_calendar <br>$hour_worker[0]:$minute_worker[0]
-          //          $hour_worker[$day_calendar]:$minute_worker[$day_calendar]<br></li> ";
-
-
-
-            $day_calendar ++;
-        }
-
-        return $out.'</tr></table></div>';
-*/
     }
 
     function table_time_worker($month, $year, $id){
@@ -271,7 +256,21 @@ class Workers
         $first_day = $date->format('N');
         $day_month = $date->format('t');
         $month_1 =$month+1;
-        $sqlQuery = "SELECT * FROM timeing WHERE user_id = $id AND datetime > '$year-$month-01' AND datetime <='$year-$month_1-1' ORDER BY datetime";
+
+        $month_1 =$month+1;
+        $month_2 =$month-1;
+        $year_1 = $year;
+        $year_2 = $year;
+        if($month_1 == 13) {
+            $year_1 = $year+1;
+            $month_1 = 01;
+        }
+        if($month_2 == 0) {
+            $year_2 = $year-1;
+            $month_2 = 12;
+        }
+
+        $sqlQuery = "SELECT * FROM timeing WHERE user_id = $id AND datetime >= '$year_2-$month_2-27' AND datetime <='$year_1-$month_1-1' ORDER BY datetime";
         $sqlrResult = $this->querySqlTimeing($sqlQuery);
         return $sqlrResult;
     }
