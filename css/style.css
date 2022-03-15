@@ -39,6 +39,8 @@ body
     100% {transform: translateY(0);}
 }
 
+
+
 .workers_list
 {
 	line-height:normal;
@@ -220,34 +222,21 @@ body
 
 .weekdays
 {
-	margin:0;
-	padding:10px 0;
-	background-color:rgba(59,15,255,0.164);
+	
 	font-size: larger;
+	width: 100%;
+	background-color: #ffffff34;
+	
 }
 
-.weekdays li
-{
-	display:inline-block;
-	width:13.6%;
-	color:#000;
-	text-align:center;
-}
-
-.days
-{
-	padding:10px 0;
-	background:#eee;
-	margin-bottom: 0;
-}
-
-.days li
-{
-	display:inline-block;
+.calendarTH {
 	width:13.6%;
 	text-align:center;
-	color:#000;
+	padding: 10px 0 10px 0;
 }
+
+
+
 
 
 /* Add media queries for smaller screens */

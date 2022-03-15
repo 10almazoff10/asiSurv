@@ -52,7 +52,6 @@ def check_last_update_date():
     return last_update_date
 
 def check_new_update(last_update_date):
-
     time_now = time.strftime("%Y-%m-%d %H:%M:%S")
     print(f"Сейчас {time_now}")
     SQL_ACCESS = f"""SELECT HozOrgan as worker_id, TimeVal as occur_at, Par4 as code
@@ -85,35 +84,37 @@ def update_log(new_date):
 
 
 def main():
-    try:
-        last_update_date = check_last_update_date()
-        print(f'Последняя дата обновления {last_update_date}')
-    except:
-        print('Ошибка проверки последнего обновления')
-        return
+    while True:
+        try:
+            last_update_date = check_last_update_date()
+            
+            print(f'Последняя дата обновления {last_update_date}')
+        except:
+            print('Ошибка проверки последнего обновления')
+            return
 
-    try:
-        update = check_new_update(last_update_date)
-        if update != []:
-            print(f'Доступно для обновления {len(update)} новых записи')
-            print(update[len(update) - 1][1])
-            try:
-                updating(update)
-            except:
-                print('Ошибка загрузки обновлений')
-                return
-                
-            new_update_date = update[len(update) - 1][1]
-            update_log(new_update_date)
-            print('Обновление успешно выполнено!')
+        try:
+            update = check_new_update(last_update_date)
+            if update != []:
+                print(f'Доступно для обновления {len(update)} новых записи')
+                print(update[len(update) - 1][1])
+                try:
+                    updating(update)
+                except:
+                    print('Ошибка загрузки обновлений')
+                    return
+                    
+                new_update_date = update[len(update) - 1][1]
+                update_log(new_update_date)
+                print('Обновление успешно выполнено!')
 
 
-        else:
-            print('Новых записей нет')
-    
-    except:
-        print('Ошибка')
-
+            else:
+                print('Новых записей нет')
+        
+        except:
+            print('Ошибка')
+        time.sleep(5000)
 
 
 
