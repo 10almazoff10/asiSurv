@@ -102,16 +102,7 @@ include "php/Workers.php";
 
 
             <div class="worker_table box3d" id="result_form"></div>
-        <div>
-            <?php
 
-          //  $sqlQuery = "SELECT * FROM timeing WHERE user_id =540 AND datetime >= '2022-02-01' AND datetime <='2022-02-28' ORDER BY datetime";
-          //  $sqlrResult = $a->querySqlTimeing($sqlQuery);
-            $sqlrResult = $a->table_time_worker(2,2022,540);
-            print_r($sqlrResult);
-
-            ?>
-        </div>
             </div>
 
 
