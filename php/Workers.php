@@ -149,12 +149,17 @@ class Workers
     function table_calendar($month, $year, $id){
         //Создание полученной даты
         $date = new DateTime($year."-".$month."-1");
+        //Прерыдущий месяц
+        $year_prev = $year-1;
+        $month_prev = $month-1;
+        $date_prev = new DateTime($year_prev."-".$month_prev."-1");
         //Первый день в месяце в виде дня недели
         $first_week_day_month = $date->format('N');
         //Количество дней в месяце
         $days_in_month = $date->format('t');
+        $days_in_prev_month = $date_prev->format('t');
         //Максимальное количество цикла для вывода календаря
-        $max_cycle = $first_week_day_month+$days_in_month;
+        $max_cycle = $first_week_day_month+$days_in_month-1;
         //Переменная дня дня вывода в календарь
         $calendar_day = 01;
         //Переменная дня адекватной выборки из SQL по дате
@@ -169,15 +174,39 @@ class Workers
         //Результат выборки в виде массива
         $sqlrResult = $this->querySqlTimeing($sqlQuery);
 
+
+
         //Цикл вывода календаря
-        for($i=1; $i<$max_cycle; $i++)
+        for($i=0; $i<$max_cycle; $i++)
         {
+            if($i+2 == $first_week_day_month)
+            {
+                $out .= '<th class="calendarTH">'.$days_in_prev_month.'</th>';
+                continue;
+
+            }
+            if($i==0 && $first_week_day_month==1)
+            {
+                $out .= '<tr class="days"><th class="calendarTH"></th><th class="calendarTH"></th><th class="calendarTH"></th><th class="calendarTH"></th><th class="calendarTH"></th><th class="calendarTH"></th><th class="calendarTH">'.$days_in_prev_month.'</th></tr>';
+            }
+
+          /*  if($i == $first_week_day_month)
+            {
+                $out .= '<tr class="days"><th class="calendarTH"></th><th class="calendarTH"></th><th class="calendarTH"></th><th class="calendarTH"></th><th class="calendarTH"></th><th class="calendarTH"></th><th class="calendarTH">28</th></tr>';
+                continue;
+
+            }*/
+
             //Если переменная меньше начального дня в месяце
-            if($i < $first_week_day_month)
+            if($i+1 < $first_week_day_month)
             {
                 $out .= '<th class="calendarTH"></th>';
                 continue;
             }
+
+
+
+
             //Вывод дня в календарь
             $out .='<th class="calendarTH"><div class="calendarDay">'.$calendar_day.'</div>';
 
@@ -237,9 +266,9 @@ class Workers
             }
             $out.="</th>";
 
-
+            $b=$i+1;
             //Следующая строка при достижении воскресенья
-            if($i%7==0)
+            if($b%7==0)
             {
                 $out.='</tr><tr  class="days">';
             }
