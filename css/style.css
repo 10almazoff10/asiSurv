@@ -3,7 +3,13 @@ body
 	background:linear-gradient(to right,rgb(160, 79, 192), #36c3fb);
 	font-family:Montserrat, sans-serif!important;
 }
-
+.logopic{
+	width: 17%;
+	position: absolute;
+	z-index: 3;
+	right: -113px;
+	top: 56px;
+}
 
 .main_box
 {
@@ -16,11 +22,7 @@ body
 	padding:30px;
 }
 
-.box3d
-{
-	box-shadow:0 0 20px;
-	border-radius:10px;
-}
+
 
 .left_panel
 {
@@ -114,8 +116,11 @@ body
 	margin-left:50px;
 	width:100%;
 	height: min-content;
-	padding-bottom: 15px;
+	padding: 0 10% 15px 10%;
 }
+
+
+
 
 .top_picker
 {
@@ -142,22 +147,24 @@ body
 	border-radius:3px;
 }
 
-.about_worker
-{
-	font-size:large;
-    font-weight: bold;
-	padding:20px;
-	margin:auto;
-	width:500px;
-}
-
 .worker_table
 {
 	
-	width:60%;
-	min-width:700px;
+	width:100%;
+	margin:auto;
+	min-width: 625px;
+	height: 50vh;	
+}
+
+
+.about_worker
+{
+
+	padding:20px;
 	margin:auto;
 }
+
+
 
 .search
 {
@@ -219,21 +226,23 @@ body
 
 .weekdays
 {
-	font-size: larger;
+
 	width: 100%;
 	background-color: #ffffff34;
 	text-align:left;
 	
+	
 }
+
 .calendarDay {
 	font-weight: 300;
-	font-size: small;
+	font-size:14px;
 }
 .calendarTH {
 	width:13.6%;
-	padding: 10px 0 10px 10px;
+	padding: 3px 0 3px 10px;
 	vertical-align: top;
-	font-size: small;
+	font-size:10px;
 }
 
 .under_table {

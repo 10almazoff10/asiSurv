@@ -36,7 +36,7 @@ include "php/Workers.php";
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
 
-    <title>СУРВ</title>
+    <title>СУРВ - Система учета рабочего времени. ЗАО АлтайСпецИзделия</title>
 </head>
 
 <body>
@@ -47,7 +47,9 @@ include "php/Workers.php";
     <div class="left_panel box3d">
         <div class="workers_list">
             <div class="navbar">
+                
                 <input placeholder="Начните писать фамилию..." class="form-control" id="search" name="search" type="text" data-toggle="hideseek" data-list=".form_radio_btn" autofocus>
+                <input class="btn btn-light btn_date" type="button" id="btn_all" value="Сформировать отчет по всем" />
             </div>
 
             <form method="POST" id="ajax_form" action="" >
@@ -101,7 +103,9 @@ include "php/Workers.php";
         <br>
 
 
-            <div class="worker_table box3d" id="result_form"></div>
+            <div class="worker_table1" id="result_form">
+
+            
 
             </div>
 
@@ -129,6 +133,21 @@ include "php/Workers.php";
     }
 </script>
 
+<script type="text/javascript">
+    $('#btn_all').on('click', function() {
+        $.ajax({
+            url: '/php/action_ajax_form_all_workers.php',
+            method: 'post',
+            dataType: 'html',
+            data: $('#ajax_form').serialize(),
+            success: function(data){
+                result = $.parseJSON(data);
+                $('#result_form').html(result.date);
+            }
+        });
+
+    });
+</script>
 
 
 
@@ -137,6 +156,9 @@ include "php/Workers.php";
 
 
 
+<div class="logopic">
+    <img src="/img/asilogo.png" style="width: 100px;" alt="">
+</div>
 
 
 

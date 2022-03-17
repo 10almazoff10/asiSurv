@@ -114,7 +114,7 @@ def main():
         
         except:
             print('Ошибка')
-        time.sleep(5000)
+        time.sleep(60)
 
 
 

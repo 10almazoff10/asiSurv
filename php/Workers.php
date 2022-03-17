@@ -104,29 +104,23 @@ class Workers
         $FIO =$first_name. " ".$mid_name." ".$last_name;
         if ($company == 'АлтайСпецИзделия') {
             $linkPic = '/img/asilogo.png';
-        } elseif($company == 'Интермаркет'){
-            $linkPic = '/img/intermarket.png';
         }
         $out_data = '<div class="about_worker">
-                    <table>
+                        <table>
                         <tr>
-                            <th> Год - '.$year.'</th>
-                            
+                            <th> ФИО - '.$FIO.'</th>                           
                         </tr>
                         <tr>
-                            <th> Месяц - '.$month.'</th>
+                            <th>Период - '.$month.'.'.$year.'</th>
                         </tr>
                         <tr>
-                            <th> ФИО - '.$FIO.'</th>
+                            <th>Организация - '.$company.'</th>
                         </tr>
                         <tr>
-                            <th> Организация - '.$company.' </th>
-                            <th><img style="width:120px;" src="'.$linkPic.'" alt=""></th>
+                            <th>Должность - '.$post.'</th>
                         </tr>
-                        <tr>
-                            <th> Должность - '.$post.'</th>
-                        </tr>
-                    </table>
+                        
+                        </table>
                     </div>
                     <table class="weekdays">
                         <tr>
@@ -145,7 +139,7 @@ class Workers
         return $out_data;
 
     }
-    
+
 //  Вывод таблицы сотрудника
     function table_calendar($month, $year, $id){
         $date = new DateTime($year."-".$month."-1");
@@ -251,10 +245,11 @@ class Workers
 
 
     function table_worker($date, $id_worker){
+        $out='<div class="worker_table" id="result_form">';
 
         $input_data=$this->worker_out_data($date,$id_worker);
 
-        $out= $input_data;
+        $out.= $input_data.'</div>' ;
 
 
         return $out;
@@ -288,14 +283,14 @@ class Workers
             {   //Если событие вход
                 if($event[$key]  == 1)
                 {
-                    $out .="Вход: $hour_worker[$key]:$minute_worker[$key]<br>";
+                    $out .="П: $hour_worker[$key]:$minute_worker[$key] ";
 
 
                 }
                 //Если событие выход
                 elseif($event[$key]  == 2 && $event[$key-1]  == 1)
                 {
-                    $out .="Выход: $hour_worker[$key]:$minute_worker[$key]<br>";
+                    $out .="У: $hour_worker[$key]:$minute_worker[$key]<br>";
                     $key_prev = $key-1;
                     $date_in = new DateTime("$year_worker[$key_prev]-$month_worker[$key_prev]-$day_worker[$key_prev] $hour_worker[$key_prev]:$minute_worker[$key_prev]:00");
                     $date_out = new DateTime("$year_worker[$key]-$month_worker[$key]-$day_worker[$key] $hour_worker[$key]:$minute_worker[$key]:00");
@@ -320,6 +315,26 @@ class Workers
         $arr = array(global_hour_worker=>$global_hour_worker, global_minute_worker=>$global_minute_worker, out=>$out);
         return $arr;
 
+    }
+
+    function output_all_workers($date){
+        $arr_workers = $this->querySql( "SELECT * FROM $this->table_workers");
+
+        foreach ($arr_workers as $key => $value)
+        {
+
+            $id = $value['id'];
+            $date_end = $value['date_end'];
+            if ($date_end == '')
+            {
+                $out.='</div><div class="worker_table" id="result_form">';
+                $input_data=$this->worker_out_data($date,$id);
+                $out.=$input_data.'</div>' ;
+            }
+
+        }
+
+        return $out;
     }
 
 
