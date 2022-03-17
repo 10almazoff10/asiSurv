@@ -24,7 +24,6 @@ include "php/Workers.php";
     <script src="/js/HideSeek-master/jquery.hideseek.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
     <link rel="icon" class="fav" href="img/favicon.svg" type="image/svg+xml">
-    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
     
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css">
@@ -40,6 +39,9 @@ include "php/Workers.php";
 </head>
 
 <body>
+<div class="logopic">
+    <img src="/img/asilogo.png" style="width: 100px;" alt="">
+</div>
 
 <div class="main_box">
 
@@ -156,9 +158,6 @@ include "php/Workers.php";
 
 
 
-<div class="logopic">
-    <img src="/img/asilogo.png" style="width: 100px;" alt="">
-</div>
 
 
 

@@ -7,8 +7,8 @@ body
 	width: 17%;
 	position: absolute;
 	z-index: 3;
-	right: -113px;
-	top: 56px;
+	left: 5vh;
+	top: 5px;
 }
 
 .main_box
