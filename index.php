@@ -91,7 +91,7 @@ include "php/Workers.php";
                     
                 </div>
                 <input class="btn btn-light btn_date" type="button" id="btn" value="Выбрать" />
-                <button class="btn btn-light btn_date" id="print" onclick="printContent('result_form');" >Печать</button>
+                <input class="btn btn-light btn_date" type="button" id="print"  value="Печать" onclick="printContent('result_form');"/>
                 
             </form>
 
@@ -130,8 +130,7 @@ include "php/Workers.php";
         var enteredtext = $('#text').val();
         $('body').empty().html(printcontent);
         window.print();
-        $('body').html(restorepage);
-        $('#text').html(enteredtext);
+        location.reload();
     }
 </script>
 
